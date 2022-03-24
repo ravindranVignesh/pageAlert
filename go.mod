@@ -3,7 +3,7 @@ module github.com/ravindranVignesh/pageAlert
 go 1.17
 
 require (
-	github.com/AlecAivazis/survey/v2 v2.3.2
+	github.com/AlecAivazis/survey/v2 v2.3.4
 	github.com/antchfx/htmlquery v1.2.4
 	gopkg.in/toast.v1 v1.0.0-20180812000517-0a84660828b2
 )
