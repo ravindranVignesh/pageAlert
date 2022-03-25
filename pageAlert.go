@@ -1,33 +1,14 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"strconv"
 	"time"
 
-	"github.com/AlecAivazis/survey/v2"
+	"github.com/Songmu/prompter"
 	"github.com/antchfx/htmlquery"
 	"gopkg.in/toast.v1"
 )
-
-// survey config
-// the questions to ask
-var qs = []*survey.Question{
-	{
-		Name:     "url",
-		Prompt:   &survey.Input{Message: "Enter url of site:"},
-		Validate: survey.Required,
-	},
-	{
-		Name:   "timePeriod",
-		Prompt: &survey.Input{Message: "enter time period in seconds(optional):"},
-	},
-	{
-		Name:   "xpath",
-		Prompt: &survey.Input{Message: "enter Xpath of target element (optional):"},
-	},
-}
 
 func main() {
 	// cli code
@@ -37,22 +18,17 @@ func main() {
 		Xpath      string
 	}{}
 
-	// perform the questions
-	err := survey.Ask(qs, &answers, survey.WithShowCursor(true))
-	if err != nil {
-		fmt.Println(err.Error())
-		return
-	}
+	// perform questions with prompter
+	answers.URL = prompter.Prompt("❔ Enter URL of the site", "")
+	answers.TimePeriod = prompter.Prompt("❔ Enter time period in seconds (optional)", "5")
+	answers.Xpath = prompter.Prompt("❔ Enter Xpath of target element (optional)", "//body")
 
 	// extracting input values from survey answers and assigning default values
 	url := answers.URL
 	xpath := answers.Xpath
-	if xpath == "" {
-		xpath = "//body"
-	}
 	timePeriod, err := strconv.Atoi(answers.TimePeriod)
 	if err != nil {
-		timePeriod = 10
+		timePeriod = 5
 	}
 
 	// initial call to getContent
@@ -62,8 +38,9 @@ func main() {
 		newContent := getContent(url, xpath)
 		if newContent != Ogcontent {
 			pushNotification(url)
+			break
 		}
-		println("..")
+		println("...")
 	}
 
 }
