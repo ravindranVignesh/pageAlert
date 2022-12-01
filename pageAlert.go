@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"strconv"
 	"time"
@@ -33,6 +34,9 @@ func main() {
 
 	// initial call to getContent
 	Ogcontent := getContent(url, xpath)
+	arr := [4]rune{'|', '/', '-', '\\'}
+	var index int
+	index = 0
 	for {
 		time.Sleep(time.Second * time.Duration(timePeriod))
 		newContent := getContent(url, xpath)
@@ -40,9 +44,11 @@ func main() {
 			pushNotification(url)
 			break
 		}
-		println("...")
+		fmt.Printf("\b%c", arr[index])
+		index = index + 1
+		index = index % 4
 	}
-
+	fmt.Printf("\bexiting..")
 }
 
 func getContent(url string, xpath string) string {
@@ -55,6 +61,7 @@ func getContent(url string, xpath string) string {
 }
 
 func pushNotification(url string) {
+
 	notification := toast.Notification{
 		AppID:   "pageAlert",
 		Title:   "Content Changed",
