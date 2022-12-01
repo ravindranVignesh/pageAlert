@@ -61,8 +61,8 @@ func pushNotification(url string) {
 		Message: "the content in " + url + " has been updated",
 		// Icon: "go.png", // This file must exist (remove this line if it doesn't)
 		Actions: []toast.Action{
-			{"protocol", "go to site", ""},
-			{"protocol", "Dismiss", ""},
+			{Type: "protocol", Label: "go to site", Arguments: url},
+			{Type: "protocol", Label: "Dismiss", Arguments: ""},
 		},
 	}
 	err := notification.Push()
